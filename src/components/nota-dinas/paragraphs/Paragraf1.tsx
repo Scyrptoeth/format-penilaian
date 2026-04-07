@@ -35,7 +35,7 @@ export default function Paragraf1() {
           </p>
         ) : (
           <p>
-            Nota Dinas Kepala Kantor Pelayanan Pajak{" "}
+            Sehubungan dengan Nota Dinas Kepala Kantor Pelayanan Pajak{" "}
             <UniqueField fieldKey="nama_kpp" /> Nomor{" "}
             <UniqueField fieldKey="nomor_nd" /> Tanggal{" "}
             <UniqueField fieldKey="tanggal_nd" /> tentang{" "}

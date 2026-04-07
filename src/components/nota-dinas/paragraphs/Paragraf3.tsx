@@ -1,0 +1,25 @@
+"use client";
+
+import UniqueField from "@/components/document-editor/UniqueField";
+
+export default function Paragraf3() {
+  return (
+    <section className="mb-6">
+      <div className="mb-2 rounded-md bg-slate-50 px-3 py-2 border border-slate-200">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+          Paragraf 3 — Dasar Penugasan (Berlaku untuk Semua)
+        </span>
+      </div>
+
+      <div className="text-justify indent-8">
+        <p>
+          Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah
+          melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian
+          Nomor <UniqueField fieldKey="nomor_prin" /> tanggal{" "}
+          <UniqueField fieldKey="tanggal_prin" /> untuk menentukan kewajaran
+          nilai transaksi dimaksud.
+        </p>
+      </div>
+    </section>
+  );
+}

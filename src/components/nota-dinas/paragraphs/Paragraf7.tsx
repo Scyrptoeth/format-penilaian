@@ -13,7 +13,7 @@ import type { Paragraf7Option } from "@/types/nota-dinas";
 function NilaiRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-2 mb-1">
-      <span className="shrink-0 w-80">{label}</span>
+      <span className="shrink-0 w-96">{label}</span>
       <span className="shrink-0">:</span>
       <span className="flex-1">{children}</span>
     </div>

@@ -10,7 +10,7 @@ import type { Paragraf5Option } from "@/types/nota-dinas";
 function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-2 mb-1">
-      <span className="shrink-0 w-44">{label}</span>
+      <span className="shrink-0 w-52">{label}</span>
       <span className="shrink-0">:</span>
       <span className="flex-1">{children}</span>
     </div>

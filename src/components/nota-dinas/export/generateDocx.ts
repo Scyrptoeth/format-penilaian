@@ -351,7 +351,7 @@ function buildParagraf7(
   uf: UniqueFields
 ): Paragraph[] {
   const p7 = sel.paragraf7;
-  const isHI = getHIStatus(sel.paragraf2) === "hubungan_istimewa";
+  const isHI = p7 <= 3;
   const isNilaiRendah = p7 === 3 || p7 === 6;
   const hasPKP = p7 === 1 || p7 === 4;
 

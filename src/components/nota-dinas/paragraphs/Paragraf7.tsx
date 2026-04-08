@@ -4,11 +4,7 @@ import { useNotaDinasStore } from "@/stores/nota-dinas-store";
 import ParagraphSelector from "@/components/document-editor/ParagraphSelector";
 import UniqueField from "@/components/document-editor/UniqueField";
 import RupiahField from "@/components/document-editor/RupiahField";
-import {
-  PARAGRAF7_OPTIONS_HI,
-  PARAGRAF7_OPTIONS_TIDAK_HI,
-  getHIStatus,
-} from "@/types/nota-dinas";
+import { PARAGRAF7_OPTIONS } from "@/types/nota-dinas";
 import type { Paragraf7Option } from "@/types/nota-dinas";
 
 function NilaiRow({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
@@ -23,12 +19,9 @@ function NilaiRow({ label, children }: { label: React.ReactNode; children: React
 
 export default function Paragraf7() {
   const selection = useNotaDinasStore((s) => s.selections.paragraf7);
-  const p2 = useNotaDinasStore((s) => s.selections.paragraf2);
   const setSelection = useNotaDinasStore((s) => s.setSelection);
 
-  const hiStatus = getHIStatus(p2);
-  const isHI = hiStatus === "hubungan_istimewa";
-  const options = isHI ? PARAGRAF7_OPTIONS_HI : PARAGRAF7_OPTIONS_TIDAK_HI;
+  const isHI = selection <= 3;
 
   const isNilaiLebihRendah = selection === 3 || selection === 6;
   const hasPKP = selection === 1 || selection === 4;
@@ -49,7 +42,7 @@ export default function Paragraf7() {
     <section className="mb-6">
       <ParagraphSelector
         label="Paragraf 7 — Simpulan Nilai dan Potensi Pajak"
-        options={options}
+        options={PARAGRAF7_OPTIONS}
         value={selection}
         onChange={(v) => setSelection("paragraf7", v as Paragraf7Option)}
       />

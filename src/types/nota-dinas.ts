@@ -148,14 +148,11 @@ export const PARAGRAF6_OPTIONS: Record<Paragraf6Option, string> = {
   2: "Tidak Ada Temuan",
 };
 
-export const PARAGRAF7_OPTIONS_HI: Record<number, string> = {
-  1: "Nilai Penilaian > Nilai WP + Sudah Dilaporkan SPT",
-  2: "Nilai Penilaian > Nilai WP + Tidak Dilaporkan SPT",
-  3: "Nilai Penilaian < Nilai WP",
-};
-
-export const PARAGRAF7_OPTIONS_TIDAK_HI: Record<number, string> = {
-  4: "Nilai Penilaian > Nilai WP + Sudah Dilaporkan SPT",
-  5: "Nilai Penilaian > Nilai WP + Tidak Dilaporkan SPT",
-  6: "Nilai Penilaian < Nilai WP",
+export const PARAGRAF7_OPTIONS: Record<number, string> = {
+  1: "Nilai Penilaian > Nilai Transaksi WP + Sudah Dilaporkan SPT + Hubungan Istimewa",
+  2: "Nilai Penilaian > Nilai Transaksi WP + Tidak Dilaporkan SPT + Hubungan Istimewa",
+  3: "Nilai Penilaian < Nilai Transaksi WP + Hubungan Istimewa",
+  4: "Nilai Penilaian > Nilai Transaksi WP + Sudah Dilaporkan SPT + Tidak Hubungan Istimewa",
+  5: "Nilai Penilaian > Nilai Transaksi WP + Tidak Dilaporkan SPT + Tidak Hubungan Istimewa",
+  6: "Nilai Penilaian < Nilai Transaksi WP + Tidak Hubungan Istimewa",
 };

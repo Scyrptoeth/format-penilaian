@@ -24,8 +24,8 @@ export default function ParagraphSelector({
   disabled,
 }: ParagraphSelectorProps) {
   return (
-    <div className="mb-3 flex items-center gap-3 rounded-md bg-gray-50 px-3 py-2 border border-gray-200">
-      <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 shrink-0">
+    <div className="mb-3 flex items-center gap-3 rounded-md bg-muted px-3 py-2 border border-border">
+      <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground shrink-0">
         {label}
       </span>
       <Select
@@ -33,7 +33,7 @@ export default function ParagraphSelector({
         onValueChange={(v) => onChange(Number(v))}
         disabled={disabled}
       >
-        <SelectTrigger className="h-8 text-xs flex-1 bg-white">
+        <SelectTrigger className="h-8 text-xs flex-1 bg-background">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

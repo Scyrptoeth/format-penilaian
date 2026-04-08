@@ -12,14 +12,14 @@ const documents = [
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-background border-b border-border">
         <div className="mx-auto max-w-4xl px-6 py-8">
-          <h1 className="text-2xl font-bold text-black tracking-tight">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">
             Format Penilaian
           </h1>
-          <p className="mt-2 text-sm text-gray-500 max-w-2xl">
+          <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
             Aplikasi pembuatan dokumen-dokumen Penilaian Pajak oleh Penilai
             Direktorat Jenderal Pajak (DJP) Indonesia. Pilih jenis dokumen di
             bawah untuk mulai.
@@ -37,7 +37,7 @@ export default function HomePage() {
 
       {/* Document list */}
       <div className="mx-auto max-w-4xl px-6 py-8">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-4">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
           Jenis Dokumen
         </h2>
 
@@ -46,22 +46,22 @@ export default function HomePage() {
             <Link
               key={doc.id}
               href={`/${doc.id}`}
-              className="group block rounded-lg border border-gray-200 bg-white p-6 hover:border-black transition-all"
+              className="group block rounded-lg border border-border bg-background p-6 hover:border-foreground transition-all"
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-base font-semibold text-black group-hover:text-gray-600 transition-colors">
+                  <h3 className="text-base font-semibold text-foreground group-hover:text-foreground/60 transition-colors">
                     {doc.title}
                   </h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {doc.description}
                   </p>
                 </div>
-                <span className="shrink-0 ml-4 inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
+                <span className="shrink-0 ml-4 inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium text-foreground">
                   {doc.status}
                 </span>
               </div>
-              <div className="mt-4 text-sm font-medium text-black group-hover:text-gray-600">
+              <div className="mt-4 text-sm font-medium text-foreground group-hover:text-foreground/60">
                 Buat Dokumen &rarr;
               </div>
             </Link>
@@ -70,9 +70,9 @@ export default function HomePage() {
       </div>
 
       {/* Footer */}
-      <footer className="mt-auto border-t border-gray-200 bg-white">
+      <footer className="mt-auto border-t border-border bg-background">
         <div className="mx-auto max-w-4xl px-6 py-4">
-          <p className="text-xs text-gray-400 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             Format Penilaian &mdash; Tools untuk Penilai DJP Indonesia
           </p>
         </div>

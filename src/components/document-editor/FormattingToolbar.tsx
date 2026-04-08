@@ -20,13 +20,13 @@ export default function FormattingToolbar() {
   const setFontSize = useFontStore((s) => s.setFontSize);
 
   return (
-    <div className="sticky top-[41px] z-40 bg-gray-50 border-b border-gray-200">
+    <div className="sticky top-[41px] z-40 bg-muted border-b border-border">
       <div className="mx-auto max-w-[816px] flex items-center gap-3 px-4 py-1.5">
-        <label className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
           Font
         </label>
         <Select value={fontFamily} onValueChange={(v) => v && setFontFamily(v)}>
-          <SelectTrigger className="h-7 w-[180px] text-xs bg-white">
+          <SelectTrigger className="h-7 w-[180px] text-xs bg-background">
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="max-h-[320px]">
@@ -43,16 +43,16 @@ export default function FormattingToolbar() {
           </SelectContent>
         </Select>
 
-        <div className="w-px h-5 bg-gray-300" />
+        <div className="w-px h-5 bg-border" />
 
-        <label className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
           Size
         </label>
         <Select
           value={String(fontSize)}
           onValueChange={(v) => v && setFontSize(Number(v))}
         >
-          <SelectTrigger className="h-7 w-[70px] text-xs bg-white">
+          <SelectTrigger className="h-7 w-[70px] text-xs bg-background">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>

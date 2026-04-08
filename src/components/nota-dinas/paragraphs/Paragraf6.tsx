@@ -23,7 +23,7 @@ export default function Paragraf6() {
         {selection === 1 ? (
           <UniqueField fieldKey="temuan_administrasi" multiline />
         ) : (
-          <p className="text-gray-500">—</p>
+          <p className="text-muted-foreground">—</p>
         )}
       </div>
     </section>

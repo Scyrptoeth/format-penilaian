@@ -44,8 +44,8 @@ export default function RupiahField({ fieldKey, className }: RupiahFieldProps) {
         title={label}
         className={cn(
           "inline px-1.5 py-0.5 text-sm",
-          "border-b-2 border-gray-400 rounded-sm outline-none transition-all",
-          "hover:border-gray-600 focus:border-black focus:ring-2 focus:ring-gray-300 focus:ring-offset-1",
+          "border-b-2 border-foreground/40 rounded-sm outline-none transition-all",
+          "hover:border-foreground/60 focus:border-foreground focus:ring-2 focus:ring-ring focus:ring-offset-1",
           "bg-transparent text-right max-w-full",
           className
         )}

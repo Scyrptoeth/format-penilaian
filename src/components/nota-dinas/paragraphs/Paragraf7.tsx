@@ -73,7 +73,7 @@ export default function Paragraf7() {
 
         <NilaiRow label={koreksiLabel}>
           {isNilaiLebihRendah ? (
-            <span className="text-gray-500">—</span>
+            <span className="text-muted-foreground">—</span>
           ) : (
             <RupiahField fieldKey="koreksi" />
           )}
@@ -105,7 +105,7 @@ export default function Paragraf7() {
 
         {isNilaiLebihRendah && (
           <NilaiRow label={pphLabel}>
-            <span className="text-gray-500">—</span>
+            <span className="text-muted-foreground">—</span>
           </NilaiRow>
         )}
       </div>

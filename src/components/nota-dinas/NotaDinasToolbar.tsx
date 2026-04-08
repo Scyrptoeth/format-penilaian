@@ -126,16 +126,16 @@ export default function NotaDinasToolbar() {
 
   return (
     <>
-      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
+      <div className="sticky top-0 z-50 bg-background border-b border-border shadow-sm">
         <div className="mx-auto max-w-[816px] flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-sm text-gray-500 hover:text-black transition-colors"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               &larr; Kembali
             </Link>
-            <span className="text-sm font-semibold text-black">
+            <span className="text-sm font-semibold text-foreground">
               Nota Dinas Penyampaian Laporan Penilaian
             </span>
           </div>
@@ -166,7 +166,7 @@ export default function NotaDinasToolbar() {
               </svg>
               Terdapat isian yang belum dilengkapi
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-gray-600">
+            <AlertDialogDescription className="text-sm text-muted-foreground">
               Beberapa kolom belum diisi. Kolom yang kosong akan ditampilkan sebagai garis bawah (___) di file yang diunduh.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -174,13 +174,13 @@ export default function NotaDinasToolbar() {
           <div className="space-y-3 px-1">
             <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm max-h-[240px] overflow-y-auto pr-1">
               {emptyFields.map((name) => (
-                <li key={name} className="flex items-center gap-2 text-gray-700">
+                <li key={name} className="flex items-center gap-2 text-foreground">
                   <span className="w-1.5 h-1.5 rounded-full bg-foreground shrink-0" />
                   {name}
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-muted-foreground">
               Apakah Anda yakin ingin melanjutkan mengunduh file ini?
             </p>
           </div>

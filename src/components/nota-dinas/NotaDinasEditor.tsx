@@ -12,17 +12,6 @@ import Paragraf7 from "./paragraphs/Paragraf7";
 export default function NotaDinasEditor() {
   return (
     <DocumentEditor>
-      <header className="text-center mb-8">
-        <h1 className="text-base font-bold uppercase tracking-wide">
-          Nota Dinas
-        </h1>
-        <p className="text-sm text-gray-600 mt-1">
-          Penyampaian Laporan Penilaian
-        </p>
-      </header>
-
-      <hr className="border-slate-300 mb-6" />
-
       <Paragraf1 />
       <Paragraf2 />
       <Paragraf3 />

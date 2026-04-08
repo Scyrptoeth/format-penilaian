@@ -32,7 +32,7 @@ export default function Paragraf5() {
         onChange={(v) => setSelection("paragraf5", v as Paragraf5Option)}
       />
 
-      <div className="pl-8 space-y-1">
+      <div className="space-y-1">
         <DetailRow label="Tujuan">
           {isHI
             ? "Menentukan indikasi Nilai Wajar atas pengalihan saham sehubungan dengan transaksi yang dipengaruhi hubungan istimewa (Pasal 18 ayat (3) UU PPh) (p. 1)"

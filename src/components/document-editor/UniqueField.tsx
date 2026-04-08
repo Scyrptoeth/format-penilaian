@@ -18,10 +18,10 @@ export default function UniqueField({ fieldKey, multiline, className }: UniqueFi
   const label = UNIQUE_FIELD_LABELS[fieldKey];
 
   const baseClasses = cn(
-    "inline-block min-w-[200px] px-1.5 py-0.5 text-sm",
+    "inline min-w-[80px] px-1.5 py-0.5 text-sm",
     "border-b-2 border-gray-400 rounded-sm outline-none transition-all",
     "hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-offset-1",
-    "bg-transparent",
+    "bg-transparent max-w-full",
     className
   );
 
@@ -46,7 +46,7 @@ export default function UniqueField({ fieldKey, multiline, className }: UniqueFi
       placeholder={label}
       title={label}
       className={baseClasses}
-      style={{ width: `${Math.max(200, (value.length + 1) * 8)}px` }}
+      style={{ width: `${Math.max(80, Math.min((value.length + 1) * 8, 500))}px` }}
     />
   );
 }

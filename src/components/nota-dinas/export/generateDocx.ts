@@ -4,9 +4,9 @@ import {
   Paragraph,
   TextRun,
   AlignmentType,
-  HeadingLevel,
-  TabStopPosition,
+  Tab,
   TabStopType,
+  LineRuleType,
   convertMillimetersToTwip,
 } from "docx";
 import type {
@@ -17,51 +17,89 @@ import type {
 import { getHIStatus } from "@/types/nota-dinas";
 import { formatRupiah } from "@/lib/utils";
 
-function bold(text: string): TextRun {
-  return new TextRun({ text, bold: true, font: "Times New Roman", size: 24 });
+// --- Font: Arial 11pt (22 half-points) ---
+const FONT = "Arial";
+const SIZE = 22; // 11pt in half-points
+
+// --- Spacing: single (1.0), no before/after ---
+const LINE_SPACING = {
+  line: 240,
+  lineRule: LineRuleType.AUTO,
+  before: 0,
+  after: 0,
+} as const;
+
+// --- Hanging indent for label:value rows (50mm) ---
+const LABEL_INDENT_TWIP = convertMillimetersToTwip(50);
+
+function text(t: string): TextRun {
+  return new TextRun({ text: t, font: FONT, size: SIZE });
 }
 
-function normal(text: string): TextRun {
-  return new TextRun({ text, font: "Times New Roman", size: 24 });
+function bold(t: string): TextRun {
+  return new TextRun({ text: t, bold: true, font: FONT, size: SIZE });
 }
 
-function italic(text: string): TextRun {
-  return new TextRun({ text, italics: true, font: "Times New Roman", size: 24 });
+function italic(t: string): TextRun {
+  return new TextRun({ text: t, italics: true, font: FONT, size: SIZE });
 }
 
-function underline(text: string): TextRun {
-  return new TextRun({
-    text: text || "___________",
-    underline: { type: "single" },
-    font: "Times New Roman",
-    size: 24,
-  });
+function tab(): TextRun {
+  return new TextRun({ children: [new Tab()], font: FONT, size: SIZE });
 }
 
-function shared(text: string): TextRun {
-  return new TextRun({
-    text: text || "___________",
-    bold: true,
-    font: "Times New Roman",
-    size: 24,
-  });
+function val(v: string): TextRun {
+  return text(v || "___________");
 }
 
 function rupiah(value: string): string {
   if (!value) return "___________";
-  return formatRupiah(value);
+  return `Rp${formatRupiah(value)}`;
 }
 
-function labelValueParagraph(label: string, value: TextRun[]): Paragraph {
+// Justified paragraph with no indent (body text)
+function bodyParagraph(children: TextRun[]): Paragraph {
   return new Paragraph({
-    children: [normal(`${label} : `), ...value],
-    spacing: { after: 80 },
-    indent: { left: convertMillimetersToTwip(15) },
-    tabStops: [
-      { type: TabStopType.LEFT, position: TabStopPosition.MAX },
+    alignment: AlignmentType.JUSTIFIED,
+    spacing: LINE_SPACING,
+    children,
+  });
+}
+
+// Empty paragraph (line break between sections)
+function emptyLine(): Paragraph {
+  return new Paragraph({
+    spacing: LINE_SPACING,
+    children: [],
+  });
+}
+
+// Section header (bold, no numbering)
+function sectionHeader(title: string): Paragraph {
+  return new Paragraph({
+    alignment: AlignmentType.JUSTIFIED,
+    spacing: LINE_SPACING,
+    children: [bold(title)],
+  });
+}
+
+// Label : Value row with hanging indent and tab stop
+function labelValueRow(label: string, valueRuns: TextRun[]): Paragraph {
+  return new Paragraph({
+    alignment: AlignmentType.JUSTIFIED,
+    spacing: LINE_SPACING,
+    indent: { left: LABEL_INDENT_TWIP, hanging: LABEL_INDENT_TWIP },
+    tabStops: [{ type: TabStopType.LEFT, position: LABEL_INDENT_TWIP }],
+    children: [
+      text(label),
+      tab(),
+      text(": "),
+      ...valueRuns,
     ],
   });
 }
+
+// --- Paragraph builders ---
 
 function buildParagraf1(
   sel: ParagraphSelections,
@@ -70,48 +108,38 @@ function buildParagraf1(
 ): Paragraph[] {
   if (sel.paragraf1 === 1) {
     return [
-      new Paragraph({
-        alignment: AlignmentType.JUSTIFIED,
-        indent: { firstLine: convertMillimetersToTwip(12) },
-        spacing: { after: 200 },
-        children: [
-          normal(
-            "Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan Penerimaan selaku Ketua Pelaksana Harian Komite Kepatuhan Wajib Pajak KPDJP Nomor ND-311/PJ.08/2026 tanggal 2 Februari 2026 tentang Penetapan Daftar Sasaran Prioritas Pengamanan Penerimaan Pajak (DSP4) Kolaboratif Semester I Tahun 2026 dan Nota Dinas Kepala Kantor Pelayanan Pajak "
-          ),
-          underline(uf.nama_kpp),
-          normal(" Nomor "),
-          underline(uf.nomor_nd),
-          normal(" Tanggal "),
-          underline(uf.tanggal_nd),
-          normal(" tentang "),
-          underline(uf.perihal_nd),
-          normal(
-            " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
-          ),
-        ],
-      }),
+      bodyParagraph([
+        text(
+          "Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan Penerimaan selaku Ketua Pelaksana Harian Komite Kepatuhan Wajib Pajak KPDJP Nomor ND-311/PJ.08/2026 tanggal 2 Februari 2026 tentang Penetapan Daftar Sasaran Prioritas Pengamanan Penerimaan Pajak (DSP4) Kolaboratif Semester I Tahun 2026 dan Nota Dinas Kepala Kantor Pelayanan Pajak "
+        ),
+        val(uf.nama_kpp),
+        text(" Nomor "),
+        val(uf.nomor_nd),
+        text(" Tanggal "),
+        val(uf.tanggal_nd),
+        text(" tentang "),
+        val(uf.perihal_nd),
+        text(
+          " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
+        ),
+      ]),
     ];
   }
 
   return [
-    new Paragraph({
-      alignment: AlignmentType.JUSTIFIED,
-      indent: { firstLine: convertMillimetersToTwip(12) },
-      spacing: { after: 200 },
-      children: [
-        normal("Nota Dinas Kepala Kantor Pelayanan Pajak "),
-        underline(uf.nama_kpp),
-        normal(" Nomor "),
-        underline(uf.nomor_nd),
-        normal(" Tanggal "),
-        underline(uf.tanggal_nd),
-        normal(" tentang "),
-        underline(uf.perihal_nd),
-        normal(
-          " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
-        ),
-      ],
-    }),
+    bodyParagraph([
+      text("Nota Dinas Kepala Kantor Pelayanan Pajak "),
+      val(uf.nama_kpp),
+      text(" Nomor "),
+      val(uf.nomor_nd),
+      text(" Tanggal "),
+      val(uf.tanggal_nd),
+      text(" tentang "),
+      val(uf.perihal_nd),
+      text(
+        " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
+      ),
+    ]),
   ];
 }
 
@@ -126,55 +154,50 @@ function buildParagraf2(
 
   const sourceRuns: TextRun[] = isAHU
     ? [
-        normal(
+        text(
           "Berdasarkan data internal Direktorat Jenderal Pajak (DJP) dan dokumen Administrasi Hukum Umum (AHU) Nomor "
         ),
-        underline(uf.nomor_ahu),
-        normal(" tanggal "),
-        underline(uf.tanggal_ahu),
-        normal(", diketahui telah terjadi transaksi pengalihan "),
-        shared(sf.jumlah_lembar_saham),
-        normal(" lembar saham "),
+        val(uf.nomor_ahu),
+        text(" tanggal "),
+        val(uf.tanggal_ahu),
+        text(", diketahui telah terjadi transaksi pengalihan "),
+        val(sf.jumlah_lembar_saham),
+        text(" lembar saham "),
       ]
     : [
-        normal(
+        text(
           "Berdasarkan data internal Direktorat Jenderal Pajak (DJP), diketahui telah terjadi transaksi pengalihan "
         ),
-        shared(sf.persentase_kepemilikan),
-        normal(" kepemilikan saham "),
+        val(sf.persentase_kepemilikan),
+        text(" kepemilikan saham "),
       ];
 
   const hiRuns: TextRun[] = isHI
     ? [
-        normal(
+        text(
           " memiliki hubungan istimewa dengan pihak lawan transaksi tersebut, maka sesuai Pasal 18 ayat (3) Undang-Undang Pajak Penghasilan (PPh), nilai pengalihan harta harus dilakukan berdasarkan Nilai Pasar/Wajar dan bukan semata-mata berdasarkan Nilai Buku atau harga transaksi yang disepakati."
         ),
       ]
     : [
-        normal(" memiliki pengendalian atau penyertaan modal pada "),
-        shared(sf.nama_pihak_lawan),
-        normal(
+        text(" memiliki pengendalian atau penyertaan modal pada "),
+        val(sf.nama_pihak_lawan),
+        text(
           ", maka sesuai Pasal 10 ayat (1) Undang-Undang Pajak Penghasilan (UU PPh), nilai pengalihan harta harus dilakukan berdasarkan jumlah yang sesungguhnya."
         ),
       ];
 
   return [
-    new Paragraph({
-      alignment: AlignmentType.JUSTIFIED,
-      indent: { firstLine: convertMillimetersToTwip(12) },
-      spacing: { after: 200 },
-      children: [
-        ...sourceRuns,
-        shared(sf.nama_perusahaan),
-        normal(" milik Wajib Pajak "),
-        shared(sf.nama_wp),
-        normal(" kepada "),
-        shared(sf.nama_pihak_lawan),
-        normal(". Mengingat Wajib Pajak "),
-        shared(sf.nama_wp),
-        ...hiRuns,
-      ],
-    }),
+    bodyParagraph([
+      ...sourceRuns,
+      val(sf.nama_perusahaan),
+      text(" milik Wajib Pajak "),
+      val(sf.nama_wp),
+      text(" kepada "),
+      val(sf.nama_pihak_lawan),
+      text(". Mengingat Wajib Pajak "),
+      val(sf.nama_wp),
+      ...hiRuns,
+    ]),
   ];
 }
 
@@ -184,20 +207,15 @@ function buildParagraf3(
   uf: UniqueFields
 ): Paragraph[] {
   return [
-    new Paragraph({
-      alignment: AlignmentType.JUSTIFIED,
-      indent: { firstLine: convertMillimetersToTwip(12) },
-      spacing: { after: 200 },
-      children: [
-        normal(
-          "Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian Nomor "
-        ),
-        underline(uf.nomor_prin),
-        normal(" tanggal "),
-        underline(uf.tanggal_prin),
-        normal(" untuk menentukan kewajaran nilai transaksi dimaksud."),
-      ],
-    }),
+    bodyParagraph([
+      text(
+        "Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian Nomor "
+      ),
+      val(uf.nomor_prin),
+      text(" tanggal "),
+      val(uf.tanggal_prin),
+      text(" untuk menentukan kewajaran nilai transaksi dimaksud."),
+    ]),
   ];
 }
 
@@ -211,39 +229,39 @@ function buildParagraf4(
 
   const deskripsiRuns: TextRun[] = isAHU
     ? [
-        shared(sf.jumlah_lembar_saham),
-        normal(" lembar saham (setara "),
-        underline(uf.persentase_setara_kepemilikan),
-        normal(" kepemilikan) yang dialihkan kepada "),
-        normal(isHI ? "pihak afiliasi (" : ""),
-        shared(sf.nama_pihak_lawan),
-        normal(isHI ? ") (p. 1)" : " (p. 1)"),
+        val(sf.jumlah_lembar_saham),
+        text(" lembar saham (setara "),
+        val(uf.persentase_setara_kepemilikan),
+        text(" kepemilikan) yang dialihkan kepada "),
+        ...(isHI
+          ? [text("pihak afiliasi ("), val(sf.nama_pihak_lawan), text(") (p. 1)")]
+          : [val(sf.nama_pihak_lawan), text(" (p. 1)")]),
       ]
     : [
-        shared(sf.persentase_kepemilikan),
-        normal(" kepemilikan saham yang dialihkan kepada "),
-        normal(isHI ? "pihak afiliasi (" : ""),
-        shared(sf.nama_pihak_lawan),
-        normal(isHI ? ") (p. 1)" : " (p. 1)"),
+        val(sf.persentase_kepemilikan),
+        text(" kepemilikan saham yang dialihkan kepada "),
+        ...(isHI
+          ? [text("pihak afiliasi ("), val(sf.nama_pihak_lawan), text(") (p. 1)")]
+          : [val(sf.nama_pihak_lawan), text(" (p. 1)")]),
       ];
 
   return [
-    labelValueParagraph("Wajib Pajak (Subjek)", [
-      shared(sf.nama_wp),
-      normal(" (NPWP: "),
-      underline(uf.npwp_wp),
-      normal(")"),
+    labelValueRow("Wajib Pajak (Subjek)", [
+      val(sf.nama_wp),
+      text(" (NPWP: "),
+      val(uf.npwp_wp),
+      text(")"),
     ]),
-    labelValueParagraph("Perusahaan (Objek)", [
-      shared(sf.nama_perusahaan),
-      normal(" (NPWP: "),
-      underline(uf.npwp_perusahaan),
-      normal(") (p. 1)"),
+    labelValueRow("Perusahaan (Objek)", [
+      val(sf.nama_perusahaan),
+      text(" (NPWP: "),
+      val(uf.npwp_perusahaan),
+      text(") (p. 1)"),
     ]),
-    labelValueParagraph("Deskripsi Objek", deskripsiRuns),
-    labelValueParagraph("Tanggal Penilaian", [
-      underline(uf.tanggal_penilaian),
-      normal(" (p. 1)"),
+    labelValueRow("Deskripsi Objek", deskripsiRuns),
+    labelValueRow("Tanggal Penilaian", [
+      val(uf.tanggal_penilaian),
+      text(" (p. 1)"),
     ]),
   ];
 }
@@ -259,45 +277,50 @@ function buildParagraf5(
     : "Menentukan indikasi Nilai Sesungguhnya atas pengalihan saham (Pasal 10 ayat (1) UU PPh) (p. 1)";
 
   return [
-    labelValueParagraph("Tujuan", [normal(tujuan)]),
-    labelValueParagraph("Metode Penilaian", [
-      normal("Pendekatan "),
-      underline(uf.pendekatan_penilaian),
-      normal(" dengan Metode "),
-      underline(uf.metode_penilaian),
-      normal(" "),
-      underline(uf.halaman_metode),
+    labelValueRow("Tujuan", [text(tujuan)]),
+    labelValueRow("Metode Penilaian", [
+      text("Pendekatan "),
+      val(uf.pendekatan_penilaian),
+      text(" dengan Metode "),
+      val(uf.metode_penilaian),
+      text(" ("),
+      val(uf.halaman_metode),
+      text(")"),
     ]),
+    // Parameter Penyesuaian with first bullet on same line
     new Paragraph({
-      children: [normal("Parameter Penyesuaian :")],
-      spacing: { before: 120, after: 80 },
-      indent: { left: convertMillimetersToTwip(15) },
-    }),
-    new Paragraph({
+      alignment: AlignmentType.JUSTIFIED,
+      spacing: LINE_SPACING,
+      indent: { left: LABEL_INDENT_TWIP, hanging: LABEL_INDENT_TWIP },
+      tabStops: [{ type: TabStopType.LEFT, position: LABEL_INDENT_TWIP }],
       children: [
-        normal("- "),
+        text("Parameter Penyesuaian"),
+        tab(),
+        text(": - "),
         italic("Discount for Lack of Marketability"),
-        normal(" (DLOM): "),
-        underline(uf.dlom_value),
-        normal(" (p. "),
-        shared(sf.halaman_parameter),
-        normal(")"),
+        text(" (DLOM): "),
+        val(uf.dlom_value),
+        text(" (p. "),
+        val(sf.halaman_parameter),
+        text(")"),
       ],
-      spacing: { after: 80 },
-      indent: { left: convertMillimetersToTwip(20) },
     }),
+    // Second bullet (DLOC) — indented continuation
     new Paragraph({
+      alignment: AlignmentType.JUSTIFIED,
+      spacing: LINE_SPACING,
+      indent: { left: LABEL_INDENT_TWIP, hanging: LABEL_INDENT_TWIP },
+      tabStops: [{ type: TabStopType.LEFT, position: LABEL_INDENT_TWIP }],
       children: [
-        normal("- "),
+        tab(),
+        text("  - "),
         italic("Discount for Lack of Control"),
-        normal(" (DLOC): "),
-        underline(uf.dloc_value),
-        normal(" (p. "),
-        shared(sf.halaman_parameter),
-        normal(")"),
+        text(" (DLOC): "),
+        val(uf.dloc_value),
+        text(" (p. "),
+        val(sf.halaman_parameter),
+        text(")"),
       ],
-      spacing: { after: 200 },
-      indent: { left: convertMillimetersToTwip(20) },
     }),
   ];
 }
@@ -309,22 +332,14 @@ function buildParagraf6(
 ): Paragraph[] {
   if (sel.paragraf6 === 1) {
     return [
-      new Paragraph({
-        alignment: AlignmentType.JUSTIFIED,
-        indent: { firstLine: convertMillimetersToTwip(12) },
-        spacing: { after: 200 },
-        children: [underline(uf.temuan_administrasi || "(Temuan administrasi)")],
-      }),
+      bodyParagraph([
+        val(uf.temuan_administrasi || "(Temuan administrasi)"),
+      ]),
     ];
   }
 
   return [
-    new Paragraph({
-      alignment: AlignmentType.JUSTIFIED,
-      indent: { firstLine: convertMillimetersToTwip(12) },
-      spacing: { after: 200 },
-      children: [normal("—")],
-    }),
+    bodyParagraph([text("—")]),
   ];
 }
 
@@ -344,54 +359,45 @@ function buildParagraf7(
     : `Berdasarkan hasil analisis, Tim Penilai menyimpulkan ${nilaiLabel} yang lebih tinggi dibandingkan nilai yang dilaporkan Wajib Pajak:`;
 
   const paragraphs: Paragraph[] = [
-    new Paragraph({
-      alignment: AlignmentType.JUSTIFIED,
-      indent: { firstLine: convertMillimetersToTwip(12) },
-      spacing: { after: 120 },
-      children: [normal(intro)],
-    }),
-    new Paragraph({
-      children: [bold("Uraian Nilai (p. 22)")],
-      spacing: { before: 120, after: 80 },
-      indent: { left: convertMillimetersToTwip(15) },
-    }),
-    labelValueParagraph("Nilai Objek Menurut Wajib Pajak (Nilai Buku)", [
-      normal(`Rp${rupiah(uf.nilai_buku)}`),
+    bodyParagraph([text(intro)]),
+    emptyLine(),
+    // "Uraian Nilai" — normal text per ideal
+    bodyParagraph([text("Uraian Nilai (p. 22)")]),
+    labelValueRow("Nilai Objek Menurut Wajib Pajak (Nilai Buku)", [
+      text(rupiah(uf.nilai_buku)),
     ]),
-    labelValueParagraph(`Nilai Objek Menurut Penilai (${nilaiLabel})`, [
-      normal(`Rp${rupiah(uf.nilai_wajar)}`),
+    labelValueRow(`Nilai Objek Menurut Penilai (${nilaiLabel})`, [
+      text(rupiah(uf.nilai_wajar)),
     ]),
-    labelValueParagraph("Koreksi Tambahan Penghasilan (PPh Pasal 17)", [
-      normal(isNilaiRendah ? "—" : `Rp${rupiah(uf.koreksi)}`),
+    labelValueRow("Koreksi Tambahan Penghasilan (PPh Pasal 17)", [
+      text(isNilaiRendah ? "—" : rupiah(uf.koreksi)),
     ]),
   ];
 
   if (!isNilaiRendah) {
     if (hasPKP) {
       paragraphs.push(
-        new Paragraph({
-          children: [bold("Perhitungan Potensi Pajak Terutang (p. 22)")],
-          spacing: { before: 120, after: 80 },
-          indent: { left: convertMillimetersToTwip(15) },
-        }),
-        labelValueParagraph(
+        emptyLine(),
+        // "Perhitungan Potensi Pajak" — normal text per ideal
+        bodyParagraph([text("Perhitungan Potensi Pajak Terutang (p. 22)")]),
+        labelValueRow(
           "Total Penghasilan Kena Pajak (setelah Koreksi)",
-          [normal(`Rp${rupiah(uf.pkp)}`)]
+          [text(rupiah(uf.pkp))]
         )
       );
     }
 
     paragraphs.push(
-      labelValueParagraph("PPh Terutang (Tarif Pasal 17)", [
-        normal(`Rp${rupiah(uf.pph_terutang)}`),
+      labelValueRow("PPh Terutang (Tarif Pasal 17)", [
+        text(rupiah(uf.pph_terutang)),
       ]),
-      labelValueParagraph("Total Potensi Pajak yang Masih Harus Dibayar", [
-        normal(`Rp${rupiah(uf.potensi_pajak)}`),
+      labelValueRow("Total Potensi Pajak yang Masih Harus Dibayar", [
+        text(rupiah(uf.potensi_pajak)),
       ])
     );
   } else {
     paragraphs.push(
-      labelValueParagraph("PPh Terutang (Tarif Pasal 17)", [normal("—")])
+      labelValueRow("PPh Terutang (Tarif Pasal 17)", [text("—")])
     );
   }
 
@@ -417,39 +423,49 @@ export async function generateNotaDinasDocx(
           },
         },
         children: [
-          // Title
-          new Paragraph({
-            alignment: AlignmentType.CENTER,
-            spacing: { after: 40 },
-            children: [bold("NOTA DINAS")],
-            heading: HeadingLevel.HEADING_1,
-          }),
-          new Paragraph({
-            alignment: AlignmentType.CENTER,
-            spacing: { after: 300 },
-            children: [normal("Penyampaian Laporan Penilaian")],
-          }),
-
-          // Section headers + paragraphs
-          sectionHeader("I. Latar Belakang"),
+          // Paragraf 1 — Latar Belakang
+          sectionHeader("Latar Belakang"),
           ...buildParagraf1(selections, sharedFields, uniqueFields),
 
-          sectionHeader("II. Uraian Transaksi"),
+          // Empty line between sections
+          emptyLine(),
+
+          // Paragraf 2 — NO "Uraian Transaksi" header per ideal
           ...buildParagraf2(selections, sharedFields, uniqueFields),
 
-          sectionHeader("III. Dasar Penugasan"),
+          // Empty line
+          emptyLine(),
+
+          // Paragraf 3 — Dasar Penugasan
+          sectionHeader("Dasar Penugasan"),
           ...buildParagraf3(selections, sharedFields, uniqueFields),
 
-          sectionHeader("IV. Identitas Subjek dan Objek Penilaian"),
+          // Empty line
+          emptyLine(),
+
+          // Paragraf 4 — Identitas Subjek dan Objek Penilaian
+          sectionHeader("Identitas Subjek dan Objek Penilaian"),
           ...buildParagraf4(selections, sharedFields, uniqueFields),
 
-          sectionHeader("V. Ringkasan Pelaksanaan Penilaian"),
+          // Empty line
+          emptyLine(),
+
+          // Paragraf 5 — Ringkasan Pelaksanaan Penilaian
+          sectionHeader("Ringkasan Pelaksanaan Penilaian"),
           ...buildParagraf5(selections, sharedFields, uniqueFields),
 
-          sectionHeader("VI. Temuan Administrasi"),
+          // Empty line
+          emptyLine(),
+
+          // Paragraf 6 — Temuan Administrasi
+          sectionHeader("Temuan Administrasi"),
           ...buildParagraf6(selections, sharedFields, uniqueFields),
 
-          sectionHeader("VII. Simpulan Nilai dan Potensi Pajak"),
+          // Empty line
+          emptyLine(),
+
+          // Paragraf 7 — Simpulan Nilai dan Potensi Pajak
+          sectionHeader("Simpulan Nilai dan Potensi Pajak"),
           ...buildParagraf7(selections, sharedFields, uniqueFields),
         ],
       },
@@ -460,16 +476,9 @@ export async function generateNotaDinasDocx(
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = "Nota-Dinas-Penyampaian-Laporan-Penilaian.docx";
+  a.download = "Nota Dinas Penyampaian Laporan Penilaian.docx";
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-}
-
-function sectionHeader(text: string): Paragraph {
-  return new Paragraph({
-    children: [bold(text)],
-    spacing: { before: 240, after: 120 },
-  });
 }

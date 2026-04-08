@@ -20,7 +20,7 @@ export default function Paragraf2() {
         onChange={(v) => setSelection("paragraf2", v as Paragraf2Option)}
       />
 
-      <div className="text-justify indent-8">
+      <div className="text-justify">
         {selection === 1 && (
           <p>
             Berdasarkan data internal Direktorat Jenderal Pajak (DJP) dan

@@ -19,7 +19,7 @@ export default function Paragraf6() {
         onChange={(v) => setSelection("paragraf6", v as Paragraf6Option)}
       />
 
-      <div className="text-justify indent-8">
+      <div className="text-justify">
         {selection === 1 ? (
           <UniqueField fieldKey="temuan_administrasi" multiline />
         ) : (

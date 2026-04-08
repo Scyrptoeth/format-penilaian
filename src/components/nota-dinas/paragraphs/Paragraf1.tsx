@@ -18,7 +18,7 @@ export default function Paragraf1() {
         onChange={(v) => setSelection("paragraf1", v as 1 | 2)}
       />
 
-      <div className="text-justify indent-8">
+      <div className="text-justify">
         {selection === 1 ? (
           <p>
             Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan

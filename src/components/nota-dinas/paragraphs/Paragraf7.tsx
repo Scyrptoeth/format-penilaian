@@ -45,11 +45,11 @@ export default function Paragraf7() {
         onChange={(v) => setSelection("paragraf7", v as Paragraf7Option)}
       />
 
-      <div className="text-justify indent-8 mb-3">
+      <div className="text-justify mb-3">
         <p>{introText}</p>
       </div>
 
-      <div className="pl-8 space-y-1">
+      <div className="space-y-1">
         <p className="font-medium mb-2">Uraian Nilai (p. 22)</p>
 
         <NilaiRow label="Nilai Objek Menurut Wajib Pajak (Nilai Buku)">

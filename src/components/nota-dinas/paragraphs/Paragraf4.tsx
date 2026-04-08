@@ -33,7 +33,7 @@ export default function Paragraf4() {
         onChange={(v) => setSelection("paragraf4", v as Paragraf4Option)}
       />
 
-      <div className="pl-8 space-y-1">
+      <div className="space-y-1">
         <IdentityRow label="Wajib Pajak (Subjek)">
           <SharedField fieldKey="nama_wp" /> (NPWP:{" "}
           <UniqueField fieldKey="npwp_wp" />)

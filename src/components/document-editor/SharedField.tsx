@@ -35,15 +35,16 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
       placeholder={label}
       title={label}
       className={cn(
-        "inline-block min-w-[200px] max-w-[360px] px-1.5 py-0.5 text-sm",
+        "inline min-w-[80px] px-1.5 py-0.5 text-sm",
         "border-b-2 rounded-sm outline-none transition-all",
         "focus:ring-2 focus:ring-offset-1",
+        "max-w-full",
         colors.bg,
         colors.border,
         colors.ring,
         className
       )}
-      style={{ width: `${Math.max(200, (value.length + 1) * 8)}px` }}
+      style={{ width: `${Math.max(80, Math.min((value.length + 1) * 8, 500))}px` }}
     />
   );
 }

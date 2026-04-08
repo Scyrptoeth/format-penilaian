@@ -11,7 +11,7 @@ export default function Paragraf3() {
         </span>
       </div>
 
-      <div className="text-justify indent-8">
+      <div className="text-justify">
         <p>
           Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah
           melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian

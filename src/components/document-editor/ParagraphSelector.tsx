@@ -5,7 +5,6 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select";
 
 interface ParagraphSelectorProps {
@@ -33,8 +32,8 @@ export default function ParagraphSelector({
         onValueChange={(v) => onChange(Number(v))}
         disabled={disabled}
       >
-        <SelectTrigger className="h-8 text-xs flex-1 bg-background">
-          <SelectValue />
+        <SelectTrigger className="h-auto min-h-8 text-xs flex-1 bg-background whitespace-normal text-left">
+          <span className="line-clamp-1">Pilihan {value}: {options[value]}</span>
         </SelectTrigger>
         <SelectContent>
           {Object.entries(options).map(([k, v]) => (

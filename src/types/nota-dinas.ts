@@ -38,12 +38,12 @@ export const SHARED_FIELD_COLORS: Record<SharedFieldKey, string> = {
 };
 
 export const SHARED_FIELD_LABELS: Record<SharedFieldKey, string> = {
-  nama_wp: "Nama Wajib Pajak",
-  nama_perusahaan: "Nama Perusahaan (Objek)",
+  nama_wp: "Nama Subjek Pajak",
+  nama_perusahaan: "Nama Objek Pajak",
   nama_pihak_lawan: "Nama Pihak Lawan Transaksi",
   jumlah_lembar_saham: "Jumlah Lembar Saham",
   persentase_kepemilikan: "Persentase Kepemilikan",
-  halaman_parameter: "Halaman Parameter",
+  halaman_parameter: "Halaman di Laporan Penilaian",
 };
 
 // Unique fields — underline, each exists in one location only
@@ -88,7 +88,7 @@ export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
   nama_kanwil_uppn: "Nama Kantor Wilayah (UPPn)",
   nomor_ahu: "Nomor AHU",
   tanggal_ahu: "Tanggal AHU",
-  nama_kanwil_penilai: "Nama Kanwil Tim Penilai",
+  nama_kanwil_penilai: "Nama Unit Penilai",
   nomor_prin: "Nomor Surat Perintah Penilaian",
   tanggal_prin: "Tanggal PRIN",
   npwp_wp: "NPWP Wajib Pajak",
@@ -101,7 +101,7 @@ export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
   dlom_value: "DLOM Value",
   dloc_value: "DLOC Value",
   temuan_administrasi: "Temuan Administrasi",
-  halaman_simpulan: "Halaman Simpulan",
+  halaman_simpulan: "Halaman di Laporan Penilaian",
   pasal_pph: "Pasal PPh",
   nilai_buku: "Nilai Buku",
   nilai_wajar: "Nilai Wajar",

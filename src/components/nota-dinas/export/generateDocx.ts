@@ -110,7 +110,7 @@ function buildParagraf1(
     return [
       bodyParagraph([
         text(
-          "Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan Penerimaan selaku Ketua Pelaksana Harian Komite Kepatuhan Wajib Pajak KPDJP Nomor ND-311/PJ.08/2026 tanggal 2 Februari 2026 tentang Penetapan Daftar Sasaran Prioritas Pengamanan Penerimaan Pajak (DSP4) Kolaboratif Semester I Tahun 2026 dan Nota Dinas Kepala Kantor Pelayanan Pajak "
+          "Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan Penerimaan selaku Ketua Pelaksana Harian Komite Kepatuhan Wajib Pajak KPDJP Nomor ND-311/PJ.08/2026 tanggal 2 Februari 2026 tentang Penetapan Daftar Sasaran Prioritas Pengamanan Penerimaan Pajak (DSP4) Kolaboratif Semester I Tahun 2026 dan Nota Dinas "
         ),
         val(uf.nama_kpp),
         text(" Nomor "),
@@ -119,16 +119,16 @@ function buildParagraf1(
         val(uf.tanggal_nd),
         text(" tentang "),
         val(uf.perihal_nd),
-        text(
-          " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
-        ),
+        text(" (dengan Unit Pelaksana Penilaian (UPPn) adalah "),
+        val(uf.nama_kanwil_uppn),
+        text(")."),
       ]),
     ];
   }
 
   return [
     bodyParagraph([
-      text("Nota Dinas Kepala Kantor Pelayanan Pajak "),
+      text("Nota Dinas "),
       val(uf.nama_kpp),
       text(" Nomor "),
       val(uf.nomor_nd),
@@ -136,9 +136,9 @@ function buildParagraf1(
       val(uf.tanggal_nd),
       text(" tentang "),
       val(uf.perihal_nd),
-      text(
-        " (dengan Unit Pelaksana Penilaian (UPPn) adalah Kantor Wilayah Sumatera Utara I)."
-      ),
+      text(" (dengan Unit Pelaksana Penilaian (UPPn) adalah "),
+      val(uf.nama_kanwil_uppn),
+      text(")."),
     ]),
   ];
 }
@@ -208,8 +208,10 @@ function buildParagraf3(
 ): Paragraph[] {
   return [
     bodyParagraph([
+      text("Oleh karena itu, Tim Penilai "),
+      val(uf.nama_kanwil_penilai),
       text(
-        "Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian Nomor "
+        " telah melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian Nomor "
       ),
       val(uf.nomor_prin),
       text(" tanggal "),
@@ -358,18 +360,20 @@ function buildParagraf7(
     ? `Berdasarkan hasil analisis, Tim Penilai menyimpulkan ${nilaiLabel} yang lebih rendah dibandingkan nilai yang dilaporkan Wajib Pajak:`
     : `Berdasarkan hasil analisis, Tim Penilai menyimpulkan ${nilaiLabel} yang lebih tinggi dibandingkan nilai yang dilaporkan Wajib Pajak:`;
 
+  const halPage = val(uf.halaman_simpulan);
+  const pasalNum = val(uf.pasal_pph);
+
   const paragraphs: Paragraph[] = [
     bodyParagraph([text(intro)]),
     emptyLine(),
-    // "Uraian Nilai" — normal text per ideal
-    bodyParagraph([text("Uraian Nilai (p. 22)")]),
+    bodyParagraph([text("Uraian Nilai (p. "), halPage, text(")")]),
     labelValueRow("Nilai Objek Menurut Wajib Pajak (Nilai Buku)", [
       text(rupiah(uf.nilai_buku)),
     ]),
     labelValueRow(`Nilai Objek Menurut Penilai (${nilaiLabel})`, [
       text(rupiah(uf.nilai_wajar)),
     ]),
-    labelValueRow("Koreksi Tambahan Penghasilan (PPh Pasal 17)", [
+    labelValueRow(`Koreksi Tambahan Penghasilan (PPh Pasal ${uf.pasal_pph || "___"})`, [
       text(isNilaiRendah ? "—" : rupiah(uf.koreksi)),
     ]),
   ];
@@ -378,8 +382,7 @@ function buildParagraf7(
     if (hasPKP) {
       paragraphs.push(
         emptyLine(),
-        // "Perhitungan Potensi Pajak" — normal text per ideal
-        bodyParagraph([text("Perhitungan Potensi Pajak Terutang (p. 22)")]),
+        bodyParagraph([text("Perhitungan Potensi Pajak Terutang (p. "), val(uf.halaman_simpulan), text(")")]),
         labelValueRow(
           "Total Penghasilan Kena Pajak (setelah Koreksi)",
           [text(rupiah(uf.pkp))]
@@ -388,7 +391,7 @@ function buildParagraf7(
     }
 
     paragraphs.push(
-      labelValueRow("PPh Terutang (Tarif Pasal 17)", [
+      labelValueRow(`PPh Terutang (Tarif Pasal ${uf.pasal_pph || "___"})`, [
         text(rupiah(uf.pph_terutang)),
       ]),
       labelValueRow("Total Potensi Pajak yang Masih Harus Dibayar", [
@@ -397,7 +400,7 @@ function buildParagraf7(
     );
   } else {
     paragraphs.push(
-      labelValueRow("PPh Terutang (Tarif Pasal 17)", [text("—")])
+      labelValueRow(`PPh Terutang (Tarif Pasal ${uf.pasal_pph || "___"})`, [text("—")])
     );
   }
 

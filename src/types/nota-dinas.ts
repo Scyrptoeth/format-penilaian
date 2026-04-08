@@ -52,8 +52,10 @@ export interface UniqueFields {
   nomor_nd: string;
   tanggal_nd: string;
   perihal_nd: string;
+  nama_kanwil_uppn: string;
   nomor_ahu: string;
   tanggal_ahu: string;
+  nama_kanwil_penilai: string;
   nomor_prin: string;
   tanggal_prin: string;
   npwp_wp: string;
@@ -66,6 +68,8 @@ export interface UniqueFields {
   dlom_value: string;
   dloc_value: string;
   temuan_administrasi: string;
+  halaman_simpulan: string;
+  pasal_pph: string;
   nilai_buku: string;
   nilai_wajar: string;
   koreksi: string;
@@ -77,12 +81,14 @@ export interface UniqueFields {
 export type UniqueFieldKey = keyof UniqueFields;
 
 export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
-  nama_kpp: "Nama KPP",
+  nama_kpp: "Jabatan & Nama KPP",
   nomor_nd: "Nomor ND",
   tanggal_nd: "Tanggal ND",
   perihal_nd: "Perihal ND",
+  nama_kanwil_uppn: "Nama Kantor Wilayah (UPPn)",
   nomor_ahu: "Nomor AHU",
   tanggal_ahu: "Tanggal AHU",
+  nama_kanwil_penilai: "Nama Kanwil Tim Penilai",
   nomor_prin: "Nomor Surat Perintah Penilaian",
   tanggal_prin: "Tanggal PRIN",
   npwp_wp: "NPWP Wajib Pajak",
@@ -95,6 +101,8 @@ export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
   dlom_value: "DLOM Value",
   dloc_value: "DLOC Value",
   temuan_administrasi: "Temuan Administrasi",
+  halaman_simpulan: "Halaman Simpulan",
+  pasal_pph: "Pasal PPh",
   nilai_buku: "Nilai Buku",
   nilai_wajar: "Nilai Wajar",
   koreksi: "Koreksi",

@@ -2,6 +2,7 @@
 
 import { useNotaDinasStore } from "@/stores/nota-dinas-store";
 import ParagraphSelector from "@/components/document-editor/ParagraphSelector";
+import UniqueField from "@/components/document-editor/UniqueField";
 import RupiahField from "@/components/document-editor/RupiahField";
 import {
   PARAGRAF7_OPTIONS_HI,
@@ -10,7 +11,7 @@ import {
 } from "@/types/nota-dinas";
 import type { Paragraf7Option } from "@/types/nota-dinas";
 
-function NilaiRow({ label, children }: { label: string; children: React.ReactNode }) {
+function NilaiRow({ label, children }: { label: React.ReactNode; children: React.ReactNode }) {
   return (
     <div className="flex gap-2 mb-1">
       <span className="shrink-0 w-96">{label}</span>
@@ -36,6 +37,14 @@ export default function Paragraf7() {
     ? `Berdasarkan hasil analisis, Tim Penilai menyimpulkan ${nilaiLabel} yang lebih rendah dibandingkan nilai yang dilaporkan Wajib Pajak:`
     : `Berdasarkan hasil analisis, Tim Penilai menyimpulkan ${nilaiLabel} yang lebih tinggi dibandingkan nilai yang dilaporkan Wajib Pajak:`;
 
+  const koreksiLabel = (
+    <>Koreksi Tambahan Penghasilan (PPh Pasal <UniqueField fieldKey="pasal_pph" />)</>
+  );
+
+  const pphLabel = (
+    <>PPh Terutang (Tarif Pasal <UniqueField fieldKey="pasal_pph" />)</>
+  );
+
   return (
     <section className="mb-6">
       <ParagraphSelector
@@ -50,7 +59,9 @@ export default function Paragraf7() {
       </div>
 
       <div className="space-y-1">
-        <p className="font-medium mb-2">Uraian Nilai (p. 22)</p>
+        <p className="font-medium mb-2">
+          Uraian Nilai (p. <UniqueField fieldKey="halaman_simpulan" />)
+        </p>
 
         <NilaiRow label="Nilai Objek Menurut Wajib Pajak (Nilai Buku)">
           <RupiahField fieldKey="nilai_buku" />
@@ -60,7 +71,7 @@ export default function Paragraf7() {
           <RupiahField fieldKey="nilai_wajar" />
         </NilaiRow>
 
-        <NilaiRow label="Koreksi Tambahan Penghasilan (PPh Pasal 17)">
+        <NilaiRow label={koreksiLabel}>
           {isNilaiLebihRendah ? (
             <span className="text-gray-500">—</span>
           ) : (
@@ -73,7 +84,8 @@ export default function Paragraf7() {
             {hasPKP && (
               <>
                 <p className="font-medium mt-3 mb-2">
-                  Perhitungan Potensi Pajak Terutang (p. 22)
+                  Perhitungan Potensi Pajak Terutang (p.{" "}
+                  <UniqueField fieldKey="halaman_simpulan" />)
                 </p>
                 <NilaiRow label="Total Penghasilan Kena Pajak (setelah Koreksi)">
                   <RupiahField fieldKey="pkp" />
@@ -81,7 +93,7 @@ export default function Paragraf7() {
               </>
             )}
 
-            <NilaiRow label="PPh Terutang (Tarif Pasal 17)">
+            <NilaiRow label={pphLabel}>
               <RupiahField fieldKey="pph_terutang" />
             </NilaiRow>
 
@@ -92,7 +104,7 @@ export default function Paragraf7() {
         )}
 
         {isNilaiLebihRendah && (
-          <NilaiRow label="PPh Terutang (Tarif Pasal 17)">
+          <NilaiRow label={pphLabel}>
             <span className="text-gray-500">—</span>
           </NilaiRow>
         )}

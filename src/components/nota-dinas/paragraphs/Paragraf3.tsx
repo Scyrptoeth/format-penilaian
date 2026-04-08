@@ -13,7 +13,8 @@ export default function Paragraf3() {
 
       <div className="text-justify">
         <p>
-          Oleh karena itu, Tim Penilai Kanwil DJP Sumatera Utara I telah
+          Oleh karena itu, Tim Penilai{" "}
+          <UniqueField fieldKey="nama_kanwil_penilai" /> telah
           melaksanakan tugas penilaian berdasarkan Surat Perintah Penilaian
           Nomor <UniqueField fieldKey="nomor_prin" /> tanggal{" "}
           <UniqueField fieldKey="tanggal_prin" /> untuk menentukan kewajaran

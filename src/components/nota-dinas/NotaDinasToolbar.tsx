@@ -28,7 +28,7 @@ function getVisibleFields(selections: ReturnType<typeof useNotaDinasStore.getSta
   const unique: UniqueFieldKey[] = [];
 
   // Paragraf 1 — always visible
-  unique.push("nama_kpp", "nomor_nd", "tanggal_nd", "perihal_nd");
+  unique.push("nama_kpp", "nomor_nd", "tanggal_nd", "perihal_nd", "nama_kanwil_uppn");
 
   // Paragraf 2 — depends on selection
   const p2 = selections.paragraf2;
@@ -42,7 +42,7 @@ function getVisibleFields(selections: ReturnType<typeof useNotaDinasStore.getSta
   shared.push("nama_perusahaan", "nama_wp", "nama_pihak_lawan");
 
   // Paragraf 3
-  unique.push("nomor_prin", "tanggal_prin");
+  unique.push("nama_kanwil_penilai", "nomor_prin", "tanggal_prin");
 
   // Paragraf 4
   unique.push("npwp_wp", "npwp_perusahaan", "tanggal_penilaian");
@@ -64,7 +64,7 @@ function getVisibleFields(selections: ReturnType<typeof useNotaDinasStore.getSta
   const p7 = selections.paragraf7;
   const isNilaiRendah = p7 === 3 || p7 === 6;
   const hasPKP = p7 === 1 || p7 === 4;
-  unique.push("nilai_buku", "nilai_wajar");
+  unique.push("halaman_simpulan", "pasal_pph", "nilai_buku", "nilai_wajar");
   if (!isNilaiRendah) {
     unique.push("koreksi");
     if (hasPKP) unique.push("pkp");
@@ -164,7 +164,7 @@ export default function NotaDinasToolbar() {
           </AlertDialogHeader>
 
           <div className="space-y-3 px-1">
-            <ul className="space-y-1 text-sm">
+            <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm max-h-[240px] overflow-y-auto pr-1">
               {emptyFields.map((name) => (
                 <li key={name} className="flex items-center gap-2 text-slate-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />

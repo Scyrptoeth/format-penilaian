@@ -15,11 +15,11 @@ export default function Paragraf1() {
         label="Paragraf 1 — Latar Belakang"
         options={PARAGRAF1_OPTIONS}
         value={selection}
-        onChange={(v) => setSelection("paragraf1", v as Opsi 1 | Opsi 2)}
+        onChange={(v) => setSelection("paragraf1", v as 1 | 2)}
       />
 
       <div className="text-justify">
-        {selection === Opsi 1 ? (
+        {selection === 1 ? (
           <p>
             Sehubungan dengan Nota Dinas Direktur Potensi, Kepatuhan, dan
             Penerimaan selaku Ketua Pelaksana Harian Komite Kepatuhan Wajib

@@ -97,7 +97,7 @@ export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
   tanggal_penilaian: "Tanggal Penilaian",
   pendekatan_penilaian: "Pendekatan Penilaian",
   metode_penilaian: "Metode Penilaian",
-  halaman_metode: "Halaman Metode",
+  halaman_metode: "Halaman di Laporan Penilaian",
   dlom_value: "DLOM Value",
   dloc_value: "DLOC Value",
   temuan_administrasi: "Temuan Administrasi",

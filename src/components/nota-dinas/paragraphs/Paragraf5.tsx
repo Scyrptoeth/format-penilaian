@@ -42,7 +42,7 @@ export default function Paragraf5() {
         <DetailRow label="Metode Penilaian">
           Pendekatan <UniqueField fieldKey="pendekatan_penilaian" /> dengan
           Metode <UniqueField fieldKey="metode_penilaian" />{" "}
-          <UniqueField fieldKey="halaman_metode" />
+          (p. <UniqueField fieldKey="halaman_metode" />)
         </DetailRow>
 
         <div className="mt-2">

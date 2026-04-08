@@ -5,7 +5,7 @@ const documents = [
     id: "nota-dinas",
     title: "Nota Dinas Penyampaian Laporan Penilaian",
     description:
-      "Dokumen formal yang menyampaikan hasil laporan penilaian saham untuk keperluan perpajakan DJP.",
+      "Dokumen Formal untuk Penyampaian Hasil Laporan Penilaian.",
     status: "Tersedia" as const,
   },
 ];
@@ -17,19 +17,19 @@ export default function HomePage() {
       <header className="bg-background border-b border-border">
         <div className="mx-auto max-w-4xl px-6 py-8">
           <h1 className="text-2xl font-bold text-foreground tracking-tight">
-            Format Penilaian
+            Format Dokumen Penilaian
           </h1>
           <p className="mt-2 text-sm text-muted-foreground max-w-2xl">
-            Aplikasi pembuatan dokumen-dokumen Penilaian Pajak oleh Penilai
-            Direktorat Jenderal Pajak (DJP) Indonesia. Pilih jenis dokumen di
-            bawah untuk mulai.
+            Aplikasi untuk Mempermudah Pembuatan Dokumen Penilaian.
+            Pilih jenis dokumen di
+            bawah untuk memulai.
           </p>
           <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-emerald-600 shrink-0">
               <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
             </svg>
             <span className="text-xs text-emerald-700">
-              100% aman — semua data diproses di perangkat Anda, tidak ada yang dikirim atau disimpan di server.
+              100% Aman sebab Semua Data Diproses di Perangkat Anda, dan Tidak Ada yang Dikirim atau Disimpan di Server.
             </span>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function HomePage() {
       <footer className="mt-auto border-t border-border bg-background">
         <div className="mx-auto max-w-4xl px-6 py-4">
           <p className="text-xs text-muted-foreground text-center">
-            Format Penilaian &mdash; Tools untuk Penilai DJP Indonesia
+            Format Dokumen Penilaian &mdash; Alat Bantu Penilai
           </p>
         </div>
       </footer>

@@ -145,7 +145,7 @@ export default function NotaDinasToolbar() {
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-emerald-500 shrink-0">
                 <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
               </svg>
-              <span className="text-[10px] text-emerald-600">Data hanya di perangkat Anda</span>
+              <span className="text-[10px] text-emerald-600">Data Hanya Diproses di Perangkat Anda</span>
             </div>
             <Button variant="outline" size="sm" onClick={handleReset}>
               Reset
@@ -167,7 +167,7 @@ export default function NotaDinasToolbar() {
               Terdapat isian yang belum dilengkapi
             </AlertDialogTitle>
             <AlertDialogDescription className="text-sm text-muted-foreground">
-              Beberapa kolom belum diisi. Kolom yang kosong akan ditampilkan sebagai garis bawah (___) di file yang diunduh.
+              Beberapa kolom belum diisi. Kolom yang kosong akan ditampilkan sebagai garis bawah (_) di file yang diunduh. Klik "Mengisi Kembali" dan Anda akan menemukan kolom yang begerak atas-bawah sebagai kolom yang seharusnya diisi.
             </AlertDialogDescription>
           </AlertDialogHeader>
 

@@ -14,9 +14,9 @@ const dmMono = DM_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Format Penilaian — Dokumen Penilaian Pajak DJP",
+  title: "Format Dokumen Penilaian",
   description:
-    "Aplikasi web untuk membuat dokumen-dokumen Penilaian Pajak oleh Penilai Direktorat Jenderal Pajak (DJP) Indonesia",
+    "Aplikasi web untuk mempermudah pembuatan dokumen-dokumen Penilaian",
 };
 
 export default function RootLayout({

@@ -24,6 +24,14 @@ export default function HomePage() {
             Direktorat Jenderal Pajak (DJP) Indonesia. Pilih jenis dokumen di
             bawah untuk mulai.
           </p>
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 border border-emerald-200 px-3 py-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-emerald-600 shrink-0">
+              <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
+            </svg>
+            <span className="text-xs text-emerald-700">
+              100% aman — semua data diproses di perangkat Anda, tidak ada yang dikirim atau disimpan di server.
+            </span>
+          </div>
         </div>
       </header>
 

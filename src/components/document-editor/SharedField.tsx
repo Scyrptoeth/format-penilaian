@@ -27,6 +27,11 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
   const label = SHARED_FIELD_LABELS[fieldKey];
   const colors = COLOR_CLASSES[color];
 
+  // Width based on placeholder or content, whichever is longer
+  const placeholderW = label.length * 7.5 + 28;
+  const contentW = (value.length + 1) * 8;
+  const fieldWidth = Math.min(Math.max(placeholderW, contentW), 500);
+
   return (
     <input
       type="text"
@@ -35,7 +40,7 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
       placeholder={label}
       title={label}
       className={cn(
-        "inline min-w-[80px] px-1.5 py-0.5 text-sm",
+        "inline px-1.5 py-0.5 text-sm",
         "border-b-2 rounded-sm outline-none transition-all",
         "focus:ring-2 focus:ring-offset-1",
         "max-w-full",
@@ -44,7 +49,7 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
         colors.ring,
         className
       )}
-      style={{ width: `${Math.max(80, Math.min((value.length + 1) * 8, 500))}px` }}
+      style={{ width: `${fieldWidth}px` }}
     />
   );
 }

@@ -1,14 +1,112 @@
 "use client";
 
+import { useState } from "react";
 import { useNotaDinasStore } from "@/stores/nota-dinas-store";
 import { generateNotaDinasDocx } from "./export/generateDocx";
 import { Button } from "@/components/ui/button";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  SHARED_FIELD_LABELS,
+  UNIQUE_FIELD_LABELS,
+  type SharedFieldKey,
+  type UniqueFieldKey,
+} from "@/types/nota-dinas";
 import Link from "next/link";
+
+// Determine which fields are visible given current paragraph selections
+function getVisibleFields(selections: ReturnType<typeof useNotaDinasStore.getState>["selections"]) {
+  const shared: SharedFieldKey[] = [];
+  const unique: UniqueFieldKey[] = [];
+
+  // Paragraf 1 — always visible
+  unique.push("nama_kpp", "nomor_nd", "tanggal_nd", "perihal_nd");
+
+  // Paragraf 2 — depends on selection
+  const p2 = selections.paragraf2;
+  const isAHU = p2 === 1 || p2 === 3;
+  if (isAHU) {
+    unique.push("nomor_ahu", "tanggal_ahu");
+    shared.push("jumlah_lembar_saham");
+  } else {
+    shared.push("persentase_kepemilikan");
+  }
+  shared.push("nama_perusahaan", "nama_wp", "nama_pihak_lawan");
+
+  // Paragraf 3
+  unique.push("nomor_prin", "tanggal_prin");
+
+  // Paragraf 4
+  unique.push("npwp_wp", "npwp_perusahaan", "tanggal_penilaian");
+  if (isAHU) {
+    unique.push("persentase_setara_kepemilikan");
+  }
+
+  // Paragraf 5
+  unique.push("pendekatan_penilaian", "metode_penilaian", "halaman_metode");
+  unique.push("dlom_value", "dloc_value");
+  shared.push("halaman_parameter");
+
+  // Paragraf 6
+  if (selections.paragraf6 === 1) {
+    unique.push("temuan_administrasi");
+  }
+
+  // Paragraf 7
+  const p7 = selections.paragraf7;
+  const isNilaiRendah = p7 === 3 || p7 === 6;
+  const hasPKP = p7 === 1 || p7 === 4;
+  unique.push("nilai_buku", "nilai_wajar");
+  if (!isNilaiRendah) {
+    unique.push("koreksi");
+    if (hasPKP) unique.push("pkp");
+    unique.push("pph_terutang", "potensi_pajak");
+  }
+
+  return { shared, unique };
+}
 
 export default function NotaDinasToolbar() {
   const store = useNotaDinasStore();
+  const [emptyFields, setEmptyFields] = useState<string[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDownload = async () => {
+    // Check for empty fields
+    const { shared, unique } = getVisibleFields(store.selections);
+
+    const missing: string[] = [];
+    for (const key of shared) {
+      if (!store.sharedFields[key].trim()) {
+        missing.push(SHARED_FIELD_LABELS[key]);
+      }
+    }
+    for (const key of unique) {
+      if (!store.uniqueFields[key].trim()) {
+        missing.push(UNIQUE_FIELD_LABELS[key]);
+      }
+    }
+
+    if (missing.length > 0) {
+      setEmptyFields(missing);
+      setDialogOpen(true);
+      return;
+    }
+
+    // All fields filled — download directly
+    await generateNotaDinasDocx(store.selections, store.sharedFields, store.uniqueFields);
+  };
+
+  const handleForceDownload = async () => {
+    setDialogOpen(false);
     await generateNotaDinasDocx(store.selections, store.sharedFields, store.uniqueFields);
   };
 
@@ -19,29 +117,73 @@ export default function NotaDinasToolbar() {
   };
 
   return (
-    <div className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
-      <div className="mx-auto max-w-[816px] flex items-center justify-between px-4 py-2">
-        <div className="flex items-center gap-3">
-          <Link
-            href="/"
-            className="text-sm text-slate-500 hover:text-slate-800 transition-colors"
-          >
-            &larr; Kembali
-          </Link>
-          <span className="text-sm font-semibold text-slate-700">
-            Nota Dinas Penyampaian Laporan Penilaian
-          </span>
-        </div>
+    <>
+      <div className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+        <div className="mx-auto max-w-[816px] flex items-center justify-between px-4 py-2">
+          <div className="flex items-center gap-3">
+            <Link
+              href="/"
+              className="text-sm text-slate-500 hover:text-slate-800 transition-colors"
+            >
+              &larr; Kembali
+            </Link>
+            <span className="text-sm font-semibold text-slate-700">
+              Nota Dinas Penyampaian Laporan Penilaian
+            </span>
+          </div>
 
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleReset}>
-            Reset
-          </Button>
-          <Button size="sm" onClick={handleDownload}>
-            Download .docx
-          </Button>
+          <div className="flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-1 mr-2">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5 text-emerald-500 shrink-0">
+                <path fillRule="evenodd" d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z" clipRule="evenodd" />
+              </svg>
+              <span className="text-[10px] text-emerald-600">Data hanya di perangkat Anda</span>
+            </div>
+            <Button variant="outline" size="sm" onClick={handleReset}>
+              Reset
+            </Button>
+            <Button size="sm" onClick={handleDownload}>
+              Download .docx
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+
+      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
+        <AlertDialogContent className="max-w-md">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="flex items-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-amber-500 shrink-0">
+                <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 6a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 6zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+              </svg>
+              Terdapat isian yang belum dilengkapi
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm text-slate-600">
+              Beberapa kolom belum diisi. Kolom yang kosong akan ditampilkan sebagai garis bawah (___) di file yang diunduh.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+
+          <div className="space-y-3 px-1">
+            <ul className="space-y-1 text-sm">
+              {emptyFields.map((name) => (
+                <li key={name} className="flex items-center gap-2 text-slate-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
+                  {name}
+                </li>
+              ))}
+            </ul>
+            <p className="text-sm text-slate-500">
+              Apakah Anda yakin ingin melanjutkan mengunduh file ini?
+            </p>
+          </div>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Kembali Mengisi</AlertDialogCancel>
+            <AlertDialogAction onClick={handleForceDownload}>
+              Lanjut Download
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }

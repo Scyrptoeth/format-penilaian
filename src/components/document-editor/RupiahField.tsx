@@ -21,23 +21,28 @@ export default function RupiahField({ fieldKey, className }: RupiahFieldProps) {
     setUniqueField(fieldKey, raw);
   };
 
+  const displayValue = value ? formatRupiah(value) : "";
+  const placeholderW = label.length * 7.5 + 28;
+  const contentW = (displayValue.length + 1) * 8;
+  const fieldWidth = Math.min(Math.max(placeholderW, contentW, 140), 500);
+
   return (
     <span className="inline-flex items-baseline">
       <span className="mr-0.5">Rp</span>
       <input
         type="text"
-        value={value ? formatRupiah(value) : ""}
+        value={displayValue}
         onChange={handleChange}
         placeholder={label}
         title={label}
         className={cn(
-          "inline-block min-w-[180px] px-1.5 py-0.5 text-sm",
+          "inline px-1.5 py-0.5 text-sm",
           "border-b-2 border-gray-400 rounded-sm outline-none transition-all",
           "hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-offset-1",
-          "bg-transparent text-right",
+          "bg-transparent text-right max-w-full",
           className
         )}
-        style={{ width: `${Math.max(180, (formatRupiah(value).length + 1) * 8)}px` }}
+        style={{ width: `${fieldWidth}px` }}
       />
     </span>
   );

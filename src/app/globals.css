@@ -128,3 +128,19 @@
     @apply font-sans;
   }
 }
+
+@keyframes bounce-field {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-6px);
+  }
+  60% {
+    transform: translateY(3px);
+  }
+}
+
+.animate-bounce-field {
+  animation: bounce-field 0.8s ease-in-out infinite;
+}

@@ -77,37 +77,45 @@ function getVisibleFields(selections: ReturnType<typeof useNotaDinasStore.getSta
 export default function NotaDinasToolbar() {
   const store = useNotaDinasStore();
   const [emptyFields, setEmptyFields] = useState<string[]>([]);
+  const [emptyFieldKeys, setEmptyFieldKeys] = useState<string[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleDownload = async () => {
-    // Check for empty fields
     const { shared, unique } = getVisibleFields(store.selections);
 
-    const missing: string[] = [];
+    const missingLabels: string[] = [];
+    const missingKeys: string[] = [];
     for (const key of shared) {
       if (!store.sharedFields[key].trim()) {
-        missing.push(SHARED_FIELD_LABELS[key]);
+        missingLabels.push(SHARED_FIELD_LABELS[key]);
+        missingKeys.push(key);
       }
     }
     for (const key of unique) {
       if (!store.uniqueFields[key].trim()) {
-        missing.push(UNIQUE_FIELD_LABELS[key]);
+        missingLabels.push(UNIQUE_FIELD_LABELS[key]);
+        missingKeys.push(key);
       }
     }
 
-    if (missing.length > 0) {
-      setEmptyFields(missing);
+    if (missingLabels.length > 0) {
+      setEmptyFields(missingLabels);
+      setEmptyFieldKeys(missingKeys);
       setDialogOpen(true);
       return;
     }
 
-    // All fields filled — download directly
     await generateNotaDinasDocx(store.selections, store.sharedFields, store.uniqueFields);
   };
 
   const handleForceDownload = async () => {
     setDialogOpen(false);
     await generateNotaDinasDocx(store.selections, store.sharedFields, store.uniqueFields);
+  };
+
+  const handleGoBack = () => {
+    setDialogOpen(false);
+    store.setBouncingFields(emptyFieldKeys);
   };
 
   const handleReset = () => {
@@ -118,16 +126,16 @@ export default function NotaDinasToolbar() {
 
   return (
     <>
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-200 shadow-sm">
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="mx-auto max-w-[816px] flex items-center justify-between px-4 py-2">
           <div className="flex items-center gap-3">
             <Link
               href="/"
-              className="text-sm text-slate-500 hover:text-slate-800 transition-colors"
+              className="text-sm text-gray-500 hover:text-black transition-colors"
             >
               &larr; Kembali
             </Link>
-            <span className="text-sm font-semibold text-slate-700">
+            <span className="text-sm font-semibold text-black">
               Nota Dinas Penyampaian Laporan Penilaian
             </span>
           </div>
@@ -150,7 +158,7 @@ export default function NotaDinasToolbar() {
       </div>
 
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <AlertDialogContent className="max-w-md">
+        <AlertDialogContent className="max-w-2xl">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-amber-500 shrink-0">
@@ -158,7 +166,7 @@ export default function NotaDinasToolbar() {
               </svg>
               Terdapat isian yang belum dilengkapi
             </AlertDialogTitle>
-            <AlertDialogDescription className="text-sm text-slate-600">
+            <AlertDialogDescription className="text-sm text-gray-600">
               Beberapa kolom belum diisi. Kolom yang kosong akan ditampilkan sebagai garis bawah (___) di file yang diunduh.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -166,18 +174,18 @@ export default function NotaDinasToolbar() {
           <div className="space-y-3 px-1">
             <ul className="grid grid-cols-2 gap-x-4 gap-y-1 text-sm max-h-[240px] overflow-y-auto pr-1">
               {emptyFields.map((name) => (
-                <li key={name} className="flex items-center gap-2 text-slate-700">
+                <li key={name} className="flex items-center gap-2 text-gray-700">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
                   {name}
                 </li>
               ))}
             </ul>
-            <p className="text-sm text-slate-500">
+            <p className="text-sm text-gray-500">
               Apakah Anda yakin ingin melanjutkan mengunduh file ini?
             </p>
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel>Kembali Mengisi</AlertDialogCancel>
+            <AlertDialogCancel onClick={handleGoBack}>Kembali Mengisi</AlertDialogCancel>
             <AlertDialogAction onClick={handleForceDownload}>
               Lanjut Download
             </AlertDialogAction>

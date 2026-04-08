@@ -14,11 +14,17 @@ interface RupiahFieldProps {
 export default function RupiahField({ fieldKey, className }: RupiahFieldProps) {
   const value = useNotaDinasStore((s) => s.uniqueFields[fieldKey]);
   const setUniqueField = useNotaDinasStore((s) => s.setUniqueField);
+  const isBouncing = useNotaDinasStore((s) => s.bouncingFields.includes(fieldKey));
+  const stopBounce = useNotaDinasStore((s) => s.stopBounce);
   const label = UNIQUE_FIELD_LABELS[fieldKey];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = parseRupiah(e.target.value);
     setUniqueField(fieldKey, raw);
+  };
+
+  const handleFocus = () => {
+    if (isBouncing) stopBounce(fieldKey);
   };
 
   const displayValue = value ? formatRupiah(value) : "";
@@ -27,18 +33,19 @@ export default function RupiahField({ fieldKey, className }: RupiahFieldProps) {
   const fieldWidth = Math.min(Math.max(placeholderW, contentW, 140), 500);
 
   return (
-    <span className="inline-flex items-baseline">
+    <span className={cn("inline-flex items-baseline", isBouncing && "animate-bounce-field")}>
       <span className="mr-0.5">Rp</span>
       <input
         type="text"
         value={displayValue}
         onChange={handleChange}
+        onFocus={handleFocus}
         placeholder={label}
         title={label}
         className={cn(
           "inline px-1.5 py-0.5 text-sm",
           "border-b-2 border-gray-400 rounded-sm outline-none transition-all",
-          "hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-offset-1",
+          "hover:border-gray-600 focus:border-black focus:ring-2 focus:ring-gray-300 focus:ring-offset-1",
           "bg-transparent text-right max-w-full",
           className
         )}

@@ -14,19 +14,25 @@ interface UniqueFieldProps {
 export default function UniqueField({ fieldKey, multiline, className }: UniqueFieldProps) {
   const value = useNotaDinasStore((s) => s.uniqueFields[fieldKey]);
   const setUniqueField = useNotaDinasStore((s) => s.setUniqueField);
+  const isBouncing = useNotaDinasStore((s) => s.bouncingFields.includes(fieldKey));
+  const stopBounce = useNotaDinasStore((s) => s.stopBounce);
 
   const label = UNIQUE_FIELD_LABELS[fieldKey];
 
-  // Width based on placeholder or content, whichever is longer
   const placeholderW = label.length * 7.5 + 28;
   const contentW = (value.length + 1) * 8;
   const fieldWidth = Math.min(Math.max(placeholderW, contentW), 500);
 
+  const handleFocus = () => {
+    if (isBouncing) stopBounce(fieldKey);
+  };
+
   const baseClasses = cn(
     "inline px-1.5 py-0.5 text-sm",
     "border-b-2 border-gray-400 rounded-sm outline-none transition-all",
-    "hover:border-gray-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 focus:ring-offset-1",
+    "hover:border-gray-600 focus:border-black focus:ring-2 focus:ring-gray-300 focus:ring-offset-1",
     "bg-transparent max-w-full",
+    isBouncing && "animate-bounce-field",
     className
   );
 
@@ -35,6 +41,7 @@ export default function UniqueField({ fieldKey, multiline, className }: UniqueFi
       <textarea
         value={value}
         onChange={(e) => setUniqueField(fieldKey, e.target.value)}
+        onFocus={handleFocus}
         placeholder={label}
         title={label}
         rows={3}
@@ -48,6 +55,7 @@ export default function UniqueField({ fieldKey, multiline, className }: UniqueFi
       type="text"
       value={value}
       onChange={(e) => setUniqueField(fieldKey, e.target.value)}
+      onFocus={handleFocus}
       placeholder={label}
       title={label}
       className={baseClasses}

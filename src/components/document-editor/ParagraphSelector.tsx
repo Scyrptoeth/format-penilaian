@@ -24,8 +24,8 @@ export default function ParagraphSelector({
   disabled,
 }: ParagraphSelectorProps) {
   return (
-    <div className="mb-3 flex items-center gap-3 rounded-md bg-slate-50 px-3 py-2 border border-slate-200">
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 shrink-0">
+    <div className="mb-3 flex items-center gap-3 rounded-md bg-gray-50 px-3 py-2 border border-gray-200">
+      <span className="text-xs font-semibold uppercase tracking-wider text-gray-500 shrink-0">
         {label}
       </span>
       <Select

@@ -14,6 +14,7 @@ interface NotaDinasState {
   selections: ParagraphSelections;
   sharedFields: SharedFields;
   uniqueFields: UniqueFields;
+  bouncingFields: string[];
 
   // Actions
   setSelection: <K extends keyof ParagraphSelections>(
@@ -22,6 +23,8 @@ interface NotaDinasState {
   ) => void;
   setSharedField: (key: SharedFieldKey, value: string) => void;
   setUniqueField: (key: UniqueFieldKey, value: string) => void;
+  setBouncingFields: (fields: string[]) => void;
+  stopBounce: (fieldKey: string) => void;
   resetAll: () => void;
 }
 
@@ -106,6 +109,7 @@ export const useNotaDinasStore = create<NotaDinasState>((set) => ({
   selections: initialSelections,
   sharedFields: initialSharedFields,
   uniqueFields: initialUniqueFields,
+  bouncingFields: [],
 
   setSelection: (key, value) =>
     set((state) => {
@@ -133,10 +137,18 @@ export const useNotaDinasStore = create<NotaDinasState>((set) => ({
       uniqueFields: { ...state.uniqueFields, [key]: value },
     })),
 
+  setBouncingFields: (fields) => set({ bouncingFields: fields }),
+
+  stopBounce: (fieldKey) =>
+    set((state) => ({
+      bouncingFields: state.bouncingFields.filter((f) => f !== fieldKey),
+    })),
+
   resetAll: () =>
     set({
       selections: initialSelections,
       sharedFields: initialSharedFields,
       uniqueFields: initialUniqueFields,
+      bouncingFields: [],
     }),
 }));

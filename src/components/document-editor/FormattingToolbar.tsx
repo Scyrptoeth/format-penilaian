@@ -20,9 +20,9 @@ export default function FormattingToolbar() {
   const setFontSize = useFontStore((s) => s.setFontSize);
 
   return (
-    <div className="sticky top-[41px] z-40 bg-slate-50 border-b border-slate-200">
+    <div className="sticky top-[41px] z-40 bg-gray-50 border-b border-gray-200">
       <div className="mx-auto max-w-[816px] flex items-center gap-3 px-4 py-1.5">
-        <label className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
           Font
         </label>
         <Select value={fontFamily} onValueChange={(v) => v && setFontFamily(v)}>
@@ -43,9 +43,9 @@ export default function FormattingToolbar() {
           </SelectContent>
         </Select>
 
-        <div className="w-px h-5 bg-slate-300" />
+        <div className="w-px h-5 bg-gray-300" />
 
-        <label className="text-[10px] font-medium uppercase tracking-wider text-slate-400">
+        <label className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
           Size
         </label>
         <Select

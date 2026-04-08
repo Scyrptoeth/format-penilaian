@@ -5,8 +5,8 @@ import UniqueField from "@/components/document-editor/UniqueField";
 export default function Paragraf3() {
   return (
     <section className="mb-6">
-      <div className="mb-2 rounded-md bg-slate-50 px-3 py-2 border border-slate-200">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+      <div className="mb-2 rounded-md bg-gray-50 px-3 py-2 border border-gray-200">
+        <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
           Paragraf 3 — Dasar Penugasan (Berlaku untuk Semua)
         </span>
       </div>

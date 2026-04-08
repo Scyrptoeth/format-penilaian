@@ -13,13 +13,13 @@ export default function DocumentEditor({ children, className }: DocumentEditorPr
   const fontSize = useFontStore((s) => s.fontSize);
 
   return (
-    <div className="min-h-screen bg-slate-100 py-6">
+    <div className="min-h-screen bg-gray-100 py-6">
       <div
         className={cn(
           "mx-auto max-w-[816px] bg-white shadow-lg",
-          "border border-slate-200 rounded-sm",
+          "border border-gray-200 rounded-sm",
           "px-16 py-12",
-          "leading-relaxed text-gray-900",
+          "leading-relaxed text-black",
           className
         )}
         style={{

@@ -22,12 +22,13 @@ interface SharedFieldProps {
 export default function SharedField({ fieldKey, className }: SharedFieldProps) {
   const value = useNotaDinasStore((s) => s.sharedFields[fieldKey]);
   const setSharedField = useNotaDinasStore((s) => s.setSharedField);
+  const isBouncing = useNotaDinasStore((s) => s.bouncingFields.includes(fieldKey));
+  const stopBounce = useNotaDinasStore((s) => s.stopBounce);
 
   const color = SHARED_FIELD_COLORS[fieldKey];
   const label = SHARED_FIELD_LABELS[fieldKey];
   const colors = COLOR_CLASSES[color];
 
-  // Width based on placeholder or content, whichever is longer
   const placeholderW = label.length * 7.5 + 28;
   const contentW = (value.length + 1) * 8;
   const fieldWidth = Math.min(Math.max(placeholderW, contentW), 500);
@@ -37,6 +38,7 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
       type="text"
       value={value}
       onChange={(e) => setSharedField(fieldKey, e.target.value)}
+      onFocus={() => isBouncing && stopBounce(fieldKey)}
       placeholder={label}
       title={label}
       className={cn(
@@ -47,6 +49,7 @@ export default function SharedField({ fieldKey, className }: SharedFieldProps) {
         colors.bg,
         colors.border,
         colors.ring,
+        isBouncing && "animate-bounce-field",
         className
       )}
       style={{ width: `${fieldWidth}px` }}

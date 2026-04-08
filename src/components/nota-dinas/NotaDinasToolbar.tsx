@@ -158,7 +158,7 @@ export default function NotaDinasToolbar() {
       </div>
 
       <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <AlertDialogContent className="max-w-4xl">
+        <AlertDialogContent className="max-w-[1792px]">
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-foreground shrink-0">

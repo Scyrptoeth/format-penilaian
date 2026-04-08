@@ -85,7 +85,7 @@ export const UNIQUE_FIELD_LABELS: Record<UniqueFieldKey, string> = {
   nomor_nd: "Nomor ND",
   tanggal_nd: "Tanggal ND",
   perihal_nd: "Perihal ND",
-  nama_kanwil_uppn: "Nama Kantor Wilayah (UPPn)",
+  nama_kanwil_uppn: "Nama Unit Penilai",
   nomor_ahu: "Nomor AHU",
   tanggal_ahu: "Tanggal AHU",
   nama_kanwil_penilai: "Nama Unit Penilai",
